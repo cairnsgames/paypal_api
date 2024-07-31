@@ -16,34 +16,46 @@ $cache = [];
  * @param string $name The property name.
  * @return string|null The property value or null if not found.
  */
-function getPropertyValue($appId, $name) {
+function getPropertyValue($appId, $settingname)
+{
     global $cache;
-    
+
     $conn = getDbConnection();
 
     // Check if the values for this appId are already cached
     if (!isset($cache[$appId])) {
-        // Values are not cached, fetch from database
-        $query = "SELECT `name`, `value` FROM `application_property` WHERE `app_id` = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param('s', $appId);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        try {
+            //     // Values are not cached, fetch from database
+            $query = "SELECT `name`, `value` FROM `application_property` WHERE `app_id` = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('s', $appId);
 
-        // Initialize an array to store the values
-        $values = [];
-        while ($row = $result->fetch_assoc()) {
-            $values[$row['name']] = $row['value'];
+            // Execute the statement
+            $stmt->execute();
+
+            // Bind the result variables
+            $stmt->bind_result($name, $value);
+
+            // Fetch values
+            $result = [];
+            $values = [];
+            while ($stmt->fetch()) {
+                $result[] = ['name' => $name, 'value' => $value];
+                $values[$name] = $value;
+            }
+
+            // Cache the values
+            $cache[$appId] = $values;
+
+            // // Free result and close statement
+            // $result->free();
+            $stmt->close();
+        } catch (Exception $ex) {
+            // Handle the exception
+            var_dump("EXCEPTION", $ex);
         }
-
-        // Cache the values
-        $cache[$appId] = $values;
-
-        // Free result and close statement
-        $result->free();
-        $stmt->close();
     }
 
     // Retrieve the value from the cache
-    return isset($cache[$appId][$name]) ? $cache[$appId][$name] : null;
+    return isset($cache[$appId][$settingname]) ? $cache[$appId][$settingname] : null;
 }

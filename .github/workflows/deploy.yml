@@ -46,7 +46,6 @@ jobs:
         password: ${{ secrets.CG_FTP_PASSWORD }}
         local-dir: ./
         server-dir: ${{ vars.SERVER_DIR }}
-        git-ftp-args: --insecure
 
     - name: Clean up
       run: rm dbconfig.php
