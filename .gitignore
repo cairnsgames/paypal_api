@@ -1,0 +1,76 @@
+# Composer
+/vendor/
+
+# Composer's cache directory
+/composer_cache/
+
+# Dependency directories
+/node_modules/
+
+# Build artifacts
+/build/
+dist/
+*.tar.gz
+*.zip
+
+# Environment files
+.env
+.env.*.local
+.env.local
+
+# PHPStorm specific
+/.idea/
+
+# MacOS specific
+.DS_Store
+
+# Windows specific
+Thumbs.db
+
+# Log files
+*.log
+*.log.*
+/log/
+
+# Operating System files
+*.swp
+*.swo
+
+# PHPUnit
+.phpunit.result.cache
+
+# Caches
+/cache/
+*.cache
+
+# Backup files
+*.bak
+*.tmp
+*.swp
+
+# IDE files
+*.sublime-project
+*.sublime-workspace
+.vscode/
+
+# SSH keys
+*.pem
+*.key
+*.pub
+
+# Other files
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+
+# Web server files
+*.pid
+*.sock
+
+# Xdebug files
+xdebug.log
+
+# Composer local configuration
+composer.lock
