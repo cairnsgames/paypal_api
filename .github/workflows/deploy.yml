@@ -39,7 +39,7 @@ jobs:
         echo "Build step (if any) goes here."
 
     - name: Deploy via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ${{ vars.CG_SERVER }}
         username: ${{ vars.CG_FTP_USERNAME }}
