@@ -24,35 +24,26 @@ $apiContext->setConfig([
     'mode' => 'sandbox', // Change to 'live' in production
 ]);
 
+
 // Retrieve webhook payload
 $body = file_get_contents('php://input');
-$webhookEvent = new WebhookEvent();
-$webhookEvent->fromJson($body);
+if (empty($body)) {
+    http_response_code(400); // Bad Request
+    die("No payload received.");
+}
+
+try {
+    $webhookEvent = new WebhookEvent();
+    $webhookEvent->fromJson($body);
+} catch (Exception $e) {
+    http_response_code(400); // Bad Request
+    die("Invalid payload: " . $e->getMessage());
+}
 
 $eventType = $webhookEvent->getEventType();
 $resource = $webhookEvent->getResource();
 
-// Function to handle successful payments
-function success($paymentid, $webhookData = null) {
-    $conn = getDbConnection();
-
-    // Prepare the SQL statement
-    $stmt = $conn->prepare("UPDATE payment_progress SET status = 'completed', webhook_data = ?, updated_at = NOW() WHERE payment_id = ?");
-    if ($stmt === false) {
-        die("Prepare failed: " . $conn->error);
-    }
-
-    $stmt->bind_param('ss', $webhookData, $paymentid);
-
-    if ($stmt->execute()) {
-        // echo "Payment marked as completed.";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-
-    $stmt->close();
-}
-
+// Process the webhook event
 switch ($eventType) {
     case 'PAYMENT.SALE.COMPLETED':
         // Payment completed successfully
@@ -63,6 +54,7 @@ switch ($eventType) {
 
     case 'PAYMENT.SALE.DENIED':
         // Payment denied
+        failed($saleId, json_encode($resource));
         break;
 
     // Handle other events as needed
