@@ -32,35 +32,28 @@ if (empty($body)) {
     die("No payload received.");
 }
 
+// using mysqli add $body to database "webhook" table with field data=$body
+$conn = getDbConnection();
+$query = "INSERT INTO `webhook` (`data`) VALUES (?)";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('s', $body);
+$stmt->execute();
+
 try {
-    $webhookEvent = new WebhookEvent();
-    $webhookEvent->fromJson($body);
+    $details = json_decode($body);
+    $paymentid = $details->resource->id;
+    $eventtype = $details->event_type;
+    $status = "pending";
+    if ($eventtype == 'PAYMENTS.PAYMENT.CREATED') {
+        $status = "completed";
+    }
+    $query = "Update payment_progress set webhook_data = ?, event_type = ?, status = ? where payment_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('sss', $body, $eventtype, $status, $paymentid);
+    $stmt->execute();
 } catch (Exception $e) {
     http_response_code(400); // Bad Request
-    die("Invalid payload: " . $e->getMessage());
-}
-
-$eventType = $webhookEvent->getEventType();
-$resource = $webhookEvent->getResource();
-
-// Process the webhook event
-switch ($eventType) {
-    case 'PAYMENT.SALE.COMPLETED':
-        // Payment completed successfully
-        $saleId = $resource['id'];
-        // Call the success function with saleId and webhook data
-        success($saleId, json_encode($resource));
-        break;
-
-    case 'PAYMENT.SALE.DENIED':
-        // Payment denied
-        failed($saleId, json_encode($resource));
-        break;
-
-    // Handle other events as needed
-    default:
-        // Handle unknown event type
-        break;
+    die("Error processing webhook: " . $e->getMessage());
 }
 
 http_response_code(200); // Respond to PayPal with HTTP 200 OK

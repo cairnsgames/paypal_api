@@ -68,8 +68,8 @@ $apiContext->setConfig([
 ]);
 
 // Example order details - replace with data from your database
-$orderID = 1001; // $_POST['order_id'];
-$totalPrice = 10; //$_POST['total_price']; // Get from your database
+$orderID = $_POST['order_id'];
+$totalPrice = $_POST['total_price']; // Get from your database
 
 $amount = new Amount();
 $amount->setTotal($totalPrice)
