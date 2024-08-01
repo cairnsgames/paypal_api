@@ -49,7 +49,7 @@ try {
     }
     $query = "Update payment_progress set webhook_data = ?, event_type = ?, status = ? where payment_id = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('sss', $body, $eventtype, $status, $paymentid);
+    $stmt->bind_param('ssss', $body, $eventtype, $status, $paymentid);
     $stmt->execute();
 } catch (Exception $e) {
     http_response_code(400); // Bad Request
