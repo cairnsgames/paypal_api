@@ -1,5 +1,5 @@
 <?php
-require_once "config.php";
+require_once "./dbconfig.php";
 
 // Function to get the MySQLi connection
 function getDbConnection() {

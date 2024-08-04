@@ -1,0 +1,89 @@
+{
+  "id": "WH-6K389985141845128-0WF74632NP2517944",
+  "event_version": "1.0",
+  "create_time": "2024-08-01T06:21:12.423Z",
+  "resource_type": "payment",
+  "event_type": "PAYMENTS.PAYMENT.CREATED",
+  "summary": "Checkout payment is created and approved by buyer",
+  "resource": {
+    "update_time": "2024-08-01T06:21:12Z",
+    "create_time": "2024-08-01T06:20:25Z",
+    "redirect_urls": {
+      "return_url": "http://localhost/cairnsgames/paypal/success.php?success=true&paymentId=PAYID-M2VSSKI5BB602301D0449605",
+      "cancel_url": "http://localhost/cairnsgames/paypal/success.php?success=false"
+    },
+    "links": [
+      {
+        "href": "https://api.sandbox.paypal.com/v1/payments/payment/PAYID-M2VSSKI5BB602301D0449605",
+        "rel": "self",
+        "method": "GET"
+      },
+      {
+        "href": "https://api.sandbox.paypal.com/v1/payments/payment/PAYID-M2VSSKI5BB602301D0449605/execute",
+        "rel": "execute",
+        "method": "POST"
+      },
+      {
+        "href": "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-08A41957U6314371G",
+        "rel": "approval_url",
+        "method": "REDIRECT"
+      }
+    ],
+    "id": "PAYID-M2VSSKI5BB602301D0449605",
+    "state": "created",
+    "transactions": [
+      {
+        "amount": { "total": "10.00", "currency": "USD" },
+        "payee": {
+          "merchant_id": "L96EMHD986RL6",
+          "email": "sb-2bml21103817@personal.example.com"
+        },
+        "description": "Order payment",
+        "item_list": {
+          "shipping_address": {
+            "recipient_name": "John Doe",
+            "line1": "Free Trade Zone",
+            "city": "Johannesburg",
+            "state": "",
+            "postal_code": "2038",
+            "country_code": "ZA"
+          }
+        },
+        "related_resources": []
+      }
+    ],
+    "intent": "sale",
+    "payer": {
+      "payment_method": "paypal",
+      "status": "VERIFIED",
+      "payer_info": {
+        "email": "sb-grofx3687201@personal.example.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "payer_id": "ERGX4GS4ABJ5W",
+        "shipping_address": {
+          "recipient_name": "John Doe",
+          "line1": "Free Trade Zone",
+          "city": "Johannesburg",
+          "state": "",
+          "postal_code": "2038",
+          "country_code": "ZA"
+        },
+        "country_code": "ZA"
+      }
+    },
+    "cart": "08A41957U6314371G"
+  },
+  "links": [
+    {
+      "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-6K389985141845128-0WF74632NP2517944",
+      "rel": "self",
+      "method": "GET"
+    },
+    {
+      "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-6K389985141845128-0WF74632NP2517944/resend",
+      "rel": "resend",
+      "method": "POST"
+    }
+  ]
+}
